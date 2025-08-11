@@ -26,7 +26,7 @@ There can be multiple BMS attached to one modbus. To make this work, each BMS ne
 #### Options:
 - **id**: ID of this component
 - **modbus_id**: ID of the [modbus component](https://esphome.io/components/modbus.html) the BMS is attached to
-- **address**: The address / board number of the BMS
+- **address**: The address of the BMS. By default, this is set to 1. The address ("board number") can be set using the DALY PC software.
 - **update_interval**: Delay between data requests (default `30s`)
 - **update_interval_fast**:
     Delay between interjected "fast" data requests (includes only voltage and current, default: off).
