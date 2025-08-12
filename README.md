@@ -26,7 +26,7 @@ There can be multiple BMS attached to one modbus. To make this work, each BMS ne
 #### Options:
 - **id**: ID of this component
 - **modbus_id**: ID of the [modbus component](https://esphome.io/components/modbus.html) the BMS is attached to
-- **address**: The address / board number of the BMS
+- **address**: The address of the BMS. By default, this is set to 1. The address ("board number") can be set using the DALY PC software.
 - **update_interval**: Delay between data requests (default `30s`)
 - **update_interval_fast**:
     Delay between interjected "fast" data requests (includes only voltage and current, default: off).
@@ -248,6 +248,35 @@ switch:
     discharge_mos:
       name: "BMS discharge FET"
 ```
+
+## Advanced usage
+Setting of registers other than the charge/discharge FETs, especially configuration registers (like warning and error levels) is not implemented in this component, both for security and simplicity reasons. It is however still possible to do so by directly calling the `daly_hkms_bms` component's `write_register(uint16_t reg, uint16_t value)` function.
+
+The writable registers are not made public by DALY themselves, they can however be reverse engineered from the DALY PC software (look in `FrmParameter`, `FrmProduct`, etc.) or sniffed from the bus.
+
+Some maybe useful registers:
+- `0x100` Board number (address)
+- `0x115` Sleep time / 10 (3600s / 10 = value 360, off = value 65535)
+- `0x116` SoC * 10 (100% * 10 = value 1000)
+- `0x1F7` Force heater on (value 0 / 1)
+- `0x1F8` Force fan on (value 0 / 1)
+
+Example:  
+To reset the SoC to 100% every 30 seconds if the BMS total voltage is above 51V, you can do:
+```yaml
+interval:
+  - interval: 30s
+    then:
+      - if:
+          condition:
+            sensor.in_range:
+              id: bms_1_total_volt # sensor id of the BMS total voltage
+              above: 51.0
+          then:
+            - lambda: |-
+                id(bms_1).write_register(0x116, 1000);
+```
+This will prevent the BMS SoC from dropping while the battery is fully charged. This may be necessary because the BMS only resets the SoC to 100% when switching off due to cell overvoltage, which either means overcharging the cells, or setting the limit unnecessarily low so it can be hit during normal charging.
 
 ## BMS connection
 Be aware that by default, the BMS goes to sleep after 1 hour of inactivity and can not be woken up via RS485, only by RX/TX UART communication (including the Bluetooth dongle), charging/discharging the battery or toggling the switch input.
