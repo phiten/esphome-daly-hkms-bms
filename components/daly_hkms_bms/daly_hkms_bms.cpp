@@ -54,7 +54,7 @@ void DalyHkmsBmsComponent::loop() {
   switch (to_send.cmd) {
     case MODBUS_CMD_READ_HOLDING_REGISTERS:
     {
-      ESP_LOGV(TAG, "Sending modbus read request to %d: start register %" PRIu16 ", register count %" PRIu16, this->daly_address_,
+      ESP_LOGV(TAG, "Sending modbus read request to %d: start register %03x, register count %" PRIu16, this->daly_address_,
         to_send.register_address, to_send.data);
       this->parent_->send(modbus_device_request_address, MODBUS_CMD_READ_HOLDING_REGISTERS, to_send.register_address, to_send.data,
         0, nullptr);
@@ -62,7 +62,7 @@ void DalyHkmsBmsComponent::loop() {
     }
     case MODBUS_CMD_WRITE_SINGLE_REGISTER:
     {
-      ESP_LOGV(TAG, "Sending modbus write request to %d: register %" PRIu16 ", value %" PRIu16, this->daly_address_,
+      ESP_LOGV(TAG, "Sending modbus write request to %d: register %03x, value %" PRIu16, this->daly_address_,
         to_send.register_address, to_send.data);
       
         uint8_t reg_value[2] = { uint8_t((to_send.data >> 8) & 0xFF), uint8_t(to_send.data & 0xFF) };
@@ -660,11 +660,15 @@ void DalyHkmsBmsComponent::on_modbus_data(const std::vector<uint8_t> &data) {
     if (has_register(address))
       input->handle_update(get_register(address));
   }
+
+  if (request.cmd == MODBUS_CMD_WRITE_SINGLE_REGISTER) {
+    ESP_LOGD(TAG, "#%d Successfully set %03x to %" PRIu16, this->daly_address_, register_offset, get_register(request.register_address));
+  }
 }
 
 void DalyHkmsBmsComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "DALY HKMS BMS:");
-  ESP_LOGCONFIG(TAG, "  Address: 0x%02X", this->daly_address_);
+  ESP_LOGCONFIG(TAG, "  Address: %d", this->daly_address_);
 }
 
 }  // namespace daly_hkms_bms
