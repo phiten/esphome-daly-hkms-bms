@@ -366,7 +366,7 @@ void DalyHkmsBmsComponent::on_modbus_data(const std::vector<uint8_t> &data) {
   if (this->precharging_mos_enabled_binary_sensor_ && has_register(DALY_MODBUS_ADDR_PRECHG_MOS_ACTIVE)) {
     this->precharging_mos_enabled_binary_sensor_->publish_state(get_register(DALY_MODBUS_ADDR_PRECHG_MOS_ACTIVE) > 0);
   }
-   if (this->heatinging_mos_enabled_binary_sensor_ && has_register(DALY_MODBUS_ADDR_HEATING_MOS_ACTIVE)) {
+   if (this->heating_mos_enabled_binary_sensor_ && has_register(DALY_MODBUS_ADDR_HEATING_MOS_ACTIVE)) {
     this->heating_mos_enabled_binary_sensor_->publish_state(get_register(DALY_MODBUS_ADDR_HEATING_MOS_ACTIVE) > 0);
   }
    if (this->fan_mos_enabled_binary_sensor_ && has_register(DALY_MODBUS_ADDR_FAN_MOS_ACTIVE)) {
