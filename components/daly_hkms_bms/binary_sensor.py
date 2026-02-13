@@ -7,6 +7,8 @@ from . import DalyHkmsBmsComponent, CONF_DALY_HKMS_BMS_ID, MAX_CELL_NUMBER
 CONF_CHARGING_MOS_ENABLED = "charging_mos_enabled"
 CONF_DISCHARGING_MOS_ENABLED = "discharging_mos_enabled"
 CONF_PRECHARGING_MOS_ENABLED = "precharging_mos_enabled"
+CONF_HEATING_MOS_ENABLED = "heating_mos_enabled"
+CONF_FAN_MOS_ENABLED = "fan_mos_enabled"
 CONF_BALANCING_ACTIVE = "balancing_active"
 
 CONF_ERROR_CHARGE_MOS_OVERTEMPERATURE = "error_charge_mos_overtemperature"
@@ -22,11 +24,15 @@ ICON_BATTERY_ARROW_DOWN = "mdi:battery-arrow-down"
 ICON_SLOPE_UPHILL = "mdi:slope-uphill"
 ICON_SCALE_BALANCE = "mdi:scale-balance"
 ICON_BATTERY_ALERT = "mdi:battery-alert"
+ICON_BATTERY_HEAT = "mdi:heat-wave"
+ICON_FAN = "mdi:fan"
 
 TYPES = [
     CONF_CHARGING_MOS_ENABLED,
     CONF_DISCHARGING_MOS_ENABLED,
     CONF_PRECHARGING_MOS_ENABLED,
+    CONF_HEATING_MOS_ENABLED,
+    CONF_FAN_MOS_ENABLED,
     CONF_BALANCING_ACTIVE,
     CONF_ERROR_CHARGE_MOS_OVERTEMPERATURE,
     CONF_ERROR_CHARGE_MOS_TEMPERATURE_DETECT,
@@ -61,6 +67,8 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(
                 CONF_PRECHARGING_MOS_ENABLED
             ): binary_sensor.binary_sensor_schema(icon=ICON_SLOPE_UPHILL),
+            cv.Optional(CONF_HEATING_MOS_ENABLED): binary_sensor.binary_sensor_schema(icon=ICON_BATTERY_HEAT),
+            cv.Optional(CONF_FAN_MOS_ENABLED): binary_sensor.binary_sensor_schema(icon=ICON_FAN),
             cv.Optional(CONF_BALANCING_ACTIVE): binary_sensor.binary_sensor_schema(icon=ICON_SCALE_BALANCE),
             cv.Optional(CONF_ERROR_CHARGE_MOS_OVERTEMPERATURE): binary_sensor.binary_sensor_schema(icon=ICON_BATTERY_ALERT),
             cv.Optional(CONF_ERROR_CHARGE_MOS_TEMPERATURE_DETECT): binary_sensor.binary_sensor_schema(icon=ICON_BATTERY_ALERT),

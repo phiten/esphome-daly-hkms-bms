@@ -199,6 +199,8 @@ class DalyHkmsBmsComponent : public PollingComponent, public modbus::ModbusDevic
   SUB_BINARY_SENSOR(charging_mos_enabled)
   SUB_BINARY_SENSOR(discharging_mos_enabled)
   SUB_BINARY_SENSOR(precharging_mos_enabled)
+  SUB_BINARY_SENSOR(heating_mos_enabled)
+  SUB_BINARY_SENSOR(fan_mos_enabled)
   SUB_BINARY_SENSOR(balancing_active)
 
   SUB_BINARY_SENSOR(error_charge_mos_overtemperature)
